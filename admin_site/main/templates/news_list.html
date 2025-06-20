@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Новости</h1>
+
+    {% for item in news %}
+    <div class="news-item">
+        <h2><a href="{% url 'news_detail' item.id %}">{{ item.title }}</a></h2>
+        <p>{{ item.date|date:"d.m.Y" }}</p>
+
+        {% if item.image %}
+        <a href="{% url 'news_detail' item.id %}">
+            <img src="{{ item.image.url }}" alt="{{ item.title }}" class="news-image">
+        </a>
+        {% endif %}
+
+        <p>{{ item.content|truncatewords:30 }}</p>
+        <a href="{% url 'news_detail' item.id %}">Читать далее</a>
+    </div>
+    {% endfor %}
+{% endblock %}

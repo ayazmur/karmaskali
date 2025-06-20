@@ -4,9 +4,10 @@
     <h2>Новости</h2>
     {% for news_item in news %}
         <div class="news-item">
-            <h3>{{ news_item.title }}</h3>
+            <h3><a href="{% url 'news_detail' news_item.id %}">{{ news_item.title }}</a></h3>
             <p><small>{{ news_item.date }}</small></p>
-            <p>{{ news_item.content }}</p>
+            <p>{{ news_item.content|truncatewords:30 }}</p>
+            <a href="{% url 'news_detail' news_item.id %}">Читать далее</a>
         </div>
     {% endfor %}
 {% endblock %}
