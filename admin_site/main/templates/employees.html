@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Наши сотрудники</h2>
+    <div class="employees">
+        {% for employee in employees %}
+            <div class="employee">
+                <h3>{{ employee.name }}</h3>
+                <p><strong>Должность:</strong> {{ employee.position }}</p>
+                <p>{{ employee.bio }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
