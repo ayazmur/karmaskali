@@ -111,6 +111,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+MEDIA_URL = '/media/'  # URL-префикс для медиафайлов
+MEDIA_ROOT = BASE_DIR / 'media'  # Папка для загрузки файлов
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
