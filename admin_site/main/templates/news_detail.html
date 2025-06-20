@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<article>
+    <h1>{{ news.title }}</h1>
+    <p><small>{{ news.date }}</small></p>
+    
+    {% if news.image %}
+        <img src="{{ news.image.url }}" alt="{{ news.title }}" class="news-image">
+    {% endif %}
+    
+    <div class="news-content">
+        {{ news.content|linebreaks }}  <!-- Сохраняет переносы строк -->
+    </div>
+</article>
+{% endblock %}
