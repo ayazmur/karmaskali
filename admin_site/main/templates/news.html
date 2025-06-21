@@ -6,15 +6,15 @@
         {% for news_item in news %}
             <div class="news-preview">
                 <a href="{% url 'news_detail' news_item.id %}" class="news-link">
-                    {% if news_item.image %}
+                    {% with featured_image=news_item.featured_image %}
                         <div class="news-image-wrapper">
-                            <img src="{{ news_item.image.url }}" alt="{{ news_item.title }}" class="news-thumbnail">
+                            {% if featured_image %}
+                                <img src="{{ featured_image.image.url }}" alt="{{ news_item.title }}" class="news-thumbnail">
+                            {% else %}
+                                <img src="/static/images/news-placeholder.jpg" alt="Новость без изображения" class="news-thumbnail">
+                            {% endif %}
                         </div>
-                    {% else %}
-                        <div class="news-image-wrapper">
-                            <img src="/static/images/news-placeholder.jpg" alt="Новость без изображения" class="news-thumbnail">
-                        </div>
-                    {% endif %}
+                    {% endwith %}
                     <div class="news-info">
                         <h3>{{ news_item.title }}</h3>
                         <p class="news-date">{{ news_item.date|date:"d.m.Y" }}</p>

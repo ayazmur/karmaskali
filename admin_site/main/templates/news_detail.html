@@ -5,12 +5,27 @@
     <h1>{{ news.title }}</h1>
     <p><small>{{ news.date }}</small></p>
     
-    {% if news.image %}
-        <img src="{{ news.image.url }}" alt="{{ news.title }}" class="news-image">
-    {% endif %}
-    
+    {% with featured_image=news.featured_image %}
+        {% if featured_image %}
+            <img src="{{ featured_image.image.url }}" alt="{{ news.title }}" class="news-image">
+        {% endif %}
+    {% endwith %}
+
     <div class="news-content">
-        {{ news.content|linebreaks }}  <!-- Сохраняет переносы строк -->
+        {{ news.content|linebreaks }}
+    </div>
+
+    <div class="news-gallery">
+        {% for image in news.images.all %}
+            {% if not image.is_featured or news.images.count == 1 %}
+                <figure>
+                    <img src="{{ image.image.url }}" alt="{{ image.caption|default:news.title }}" class="news-gallery-image">
+                    {% if image.caption %}
+                        <figcaption>{{ image.caption }}</figcaption>
+                    {% endif %}
+                </figure>
+            {% endif %}
+        {% endfor %}
     </div>
 </article>
 {% endblock %}
