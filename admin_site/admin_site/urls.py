@@ -11,13 +11,9 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def github_webhook(request):
     if request.method == 'POST':
-        try:
-            # Запускаем скрипт обновления
-            subprocess.run(["/home/ayazmur/auto-update.sh"], check=True)
-            return HttpResponse("Сайт успешно обновлен!", status=200)
-        except Exception as e:
-            return HttpResponse(f"Ошибка: {e}", status=500)
-    return HttpResponse("Только POST-запросы разрешены", status=400)
+        subprocess.run(["/home/ayazmur/auto-update.sh"], check=True)
+        return HttpResponse("OK", status=200)
+    return HttpResponse("Only POST allowed", status=400)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
