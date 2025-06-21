@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 
 class Employee(models.Model):
     name = models.CharField(max_length=100)
@@ -9,18 +10,23 @@ class Employee(models.Model):
     def __str__(self):
         return self.name
 
+
 class NewsImage(models.Model):
     news = models.ForeignKey('News', on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='news/images/')
     is_featured = models.BooleanField(default=False, verbose_name='Главное изображение')
     caption = models.CharField(max_length=200, blank=True, verbose_name='Подпись')
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
         return f"Изображение для {self.news.title}"
 
 class News(models.Model):
     title = models.CharField('Заголовок', max_length=200)
-    content = models.TextField('Текст новости')  # Можно использовать HTML-теги
+    content = RichTextField('Текст новости')
     date = models.DateTimeField('Дата публикации', auto_now_add=True)
 
     def __str__(self):
