@@ -1,0 +1,4 @@
+.venv/,
+admin_site/media/employees,
+admin_site/media/news/images,
+*.sqlite3
