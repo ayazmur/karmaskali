@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
 {% block content %}
     <h2>Добро пожаловать!</h2>
-    <p>Это официальный сайт нашей сельской администрации.</p>
-    <p>Здесь вы можете узнать последние новости, познакомиться с нашими сотрудниками и связаться с нами.</p>
+    <p>Это официальный сайт муниципального казенного учреждения "Централизованная бухгалтерия муниципальных учреждений" муниципального района Кармаскалинский район Республики Башкортостан</p>
+    <p>Здесь вы можете узнать последние новости, познакомиться с нашей организацией, нашими сотрудниками и связаться с нами.</p>
 
     {% if latest_news %}
     <section class="latest-news-section">
@@ -11,139 +15,31 @@
         <div class="latest-news-container">
             {% for news in latest_news %}
             <div class="news-preview">
-                <a href="{% url 'news_detail' news.id %}" class="news-link">
-                    <div class="news-info">
-                        <h4>{{ news.title }}</h4>
+                <a href="{% url 'news_detail' news.id %}">
+                    {% if news.image %}  <!-- или news.featured_image в зависимости от модели -->
+                    <img src="{{ news.image.url }}" alt="{{ news.title }}" class="news-image">
+                    {% endif %}
+                    <div class="news-content">
+                        <h3>{{ news.title }}</h3>
                         <div class="news-meta">
-                            <span class="news-date">
-                                <i class="far fa-clock"></i> {{ news.date|date:"d.m.Y" }}
-                            </span>
+                            <span><i class="far fa-clock"></i> {{ news.date|date:"d.m.Y H:i" }}</span>
                             {% if news.author %}
-                            <span class="news-author">
-                                <i class="fas fa-user"></i> {{ news.author.get_full_name|default:news.author.username }}
-                            </span>
+                            <span><i class="fas fa-user"></i> {{ news.author }}</span>
                             {% endif %}
                         </div>
-                        <p class="news-excerpt">
-                            {{ news.content|truncatewords:20|striptags }}
-                        </p>
-                        <span class="read-more">Подробнее →</span>
+                        <p>{{ news.content|truncatewords:20 }}</p>
                     </div>
                 </a>
             </div>
             {% endfor %}
         </div>
         <div class="all-news-link">
-            <a href="{% url 'news' %}">Все новости</a>
+            <a href="{% url 'news' %}" class="button">Все новости</a>
         </div>
     </section>
     {% endif %}
 
-    <style>
-        .latest-news-section {
-            margin-top: 50px;
-            padding-top: 30px;
-            border-top: 1px solid #eee;
-        }
 
-        .latest-news-section h3 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 25px;
-        }
-
-        .latest-news-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .news-preview {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .news-preview:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-        }
-
-        .news-link {
-            color: inherit;
-            text-decoration: none;
-            display: block;
-            height: 100%;
-        }
-
-        .news-info h4 {
-            margin: 0 0 10px 0;
-            color: #2c3e50;
-            font-size: 1.1em;
-        }
-
-        .news-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 15px;
-            color: #7f8c8d;
-            font-size: 0.85em;
-        }
-
-        .news-meta i {
-            margin-right: 5px;
-            color: #4CAF50;
-        }
-
-        .news-excerpt {
-            color: #34495e;
-            margin: 15px 0;
-            line-height: 1.5;
-            font-size: 0.95em;
-        }
-
-        .read-more {
-            color: #4CAF50;
-            font-weight: 600;
-            font-size: 0.9em;
-            display: inline-block;
-            margin-top: 10px;
-        }
-
-        .all-news-link {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .all-news-link a {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        .all-news-link a:hover {
-            background: #3e8e41;
-        }
-
-        @media (max-width: 768px) {
-            .latest-news-container {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .latest-news-container {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 
     <!-- Подключаем Font Awesome для иконок -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
