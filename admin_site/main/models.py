@@ -2,13 +2,18 @@ from django.db import models
 from ckeditor.fields import RichTextField
 
 class Employee(models.Model):
-    name = models.CharField(max_length=100)
-    position = models.CharField(max_length=100)
-    photo = models.ImageField(upload_to='employees/', blank=True, null=True)
-    bio = models.TextField()
+    name = models.CharField('ФИО', max_length=100)
+    position = models.CharField('Должность', max_length=100)
+    photo = models.ImageField('Фото', upload_to='employees/', blank=True, null=True)
+    phone = models.CharField('Рабочий телефон', max_length=20, blank=True)
+    bio = models.TextField('Биография', blank=True)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Сотрудник'
+        verbose_name_plural = 'Сотрудники'
 
 
 class NewsImage(models.Model):
