@@ -10,36 +10,37 @@
     <p>Здесь вы можете узнать последние новости, познакомиться с нашей организацией, нашими сотрудниками и связаться с нами.</p>
 
     {% if latest_news %}
-    <section class="latest-news-section">
-        <h3>Последние новости</h3>
-        <div class="latest-news-container">
-            {% for news in latest_news %}
-            <div class="news-preview">
-                <a href="{% url 'news_detail' news.id %}">
-                    {% if news.image %}  <!-- или news.featured_image в зависимости от модели -->
-                    <img src="{{ news.image.url }}" alt="{{ news.title }}" class="news-image">
-                    {% endif %}
-                    <div class="news-content">
-                        <h3>{{ news.title }}</h3>
-                        <div class="news-meta">
-                            <span><i class="far fa-clock"></i> {{ news.date|date:"d.m.Y H:i" }}</span>
-                            {% if news.author %}
-                            <span><i class="fas fa-user"></i> {{ news.author }}</span>
-                            {% endif %}
-                        </div>
-                        <p>{{ news.content|truncatewords:20 }}</p>
+<section class="latest-news-section">
+    <h3>Последние новости</h3>
+    <div class="latest-news-container">
+        {% for news in latest_news %}
+        <div class="news-preview {% if not news.featured_image %}no-image{% endif %}">
+            <a href="{% url 'news_detail' news.id %}">
+                {% if news.featured_image %}
+                <div class="news-image-wrapper">
+                    <img src="{{ news.featured_image.image.url }}" alt="{{ news.title }}" class="news-thumbnail">
+                </div>
+                {% endif %}
+                <div class="news-info">
+                    <h3>{{ news.title }}</h3>
+                    <div class="news-meta">
+                        <span><i class="far fa-clock"></i> {{ news.date|date:"d.m.Y H:i" }}</span>
+                        {% if news.author %}
+                        <span><i class="fas fa-user"></i> {{ news.author }}</span>
+                        {% endif %}
                     </div>
-                </a>
-            </div>
-            {% endfor %}
+                    <p>{{ news.content|truncatewords:20 }}</p>
+                    <span class="read-more">Читать далее <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
         </div>
-        <div class="all-news-link">
-            <a href="{% url 'news' %}" class="button">Все новости</a>
-        </div>
-    </section>
-    {% endif %}
-
-
+        {% endfor %}
+    </div>
+    <div class="all-news-link">
+        <a href="{% url 'news' %}" class="button">Все новости</a>
+    </div>
+</section>
+{% endif %}
 
     <!-- Подключаем Font Awesome для иконок -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
