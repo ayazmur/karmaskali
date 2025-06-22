@@ -43,3 +43,15 @@
 .employee-photo-link:hover .employee-photo {
     transform: scale(1.1);
 }
+.employees-table th {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.employees-table tr:hover {
+    background-color: #e6e6ff;
+}
+
+.read-more {
+    color: var(--primary-color);
+}

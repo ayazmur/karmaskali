@@ -118,3 +118,10 @@
         padding: 20px;
     }
 }
+.news-content h4 {
+    color: var(--primary-color);
+}
+
+.read-more {
+    color: var(--primary-color);
+}

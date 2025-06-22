@@ -290,3 +290,14 @@
         grid-template-columns: 1fr;
     }
 }
+.read-more {
+    color: var(--primary-color);
+}
+
+.all-news-link a {
+    background: var(--primary-color);
+}
+
+.all-news-link a:hover {
+    background: var(--primary-dark);
+}

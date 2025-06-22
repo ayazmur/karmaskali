@@ -135,3 +135,10 @@
         max-height: 60vh;
     }
 }
+.close:hover {
+    color: var(--accent-color);
+}
+
+.nav-button:hover {
+    background: rgba(255,255,255,0.5);
+}
