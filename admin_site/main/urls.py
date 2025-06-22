@@ -8,4 +8,5 @@ urlpatterns = [
     path('news/', views.news, name='news'),
     path('news/<int:news_id>/', views.news_detail, name='news_detail'),
     path('contact/', views.contact, name='contact'),
+    path('gallery/', views.gallery, name='gallery'),
 ]

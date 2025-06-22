@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from .models import Employee, News
+from .models import Employee, News, Gallery
+
 
 def home(request):
     return render(request, 'index.html')
@@ -22,3 +23,7 @@ def contact(request):
         # Обработка формы (можно добавить сохранение в БД или отправку на почту)
         pass
     return render(request, 'contact.html')
+
+def gallery(request):
+    galleries = Gallery.objects.prefetch_related('images').all()
+    return render(request, 'gallery.html', {'galleries': galleries})

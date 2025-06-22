@@ -5,7 +5,7 @@ from django.utils.html import format_html
 from django.urls import path
 from django.template.response import TemplateResponse
 from django.shortcuts import redirect
-from .models import Employee, News, NewsImage
+from .models import Employee, News, NewsImage, GalleryImage, Gallery
 from django.db.models import Count
 import os
 from django.conf import settings
@@ -130,3 +130,28 @@ class EmployeeAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" width="50" height="50" style="object-fit: cover; border-radius: 4px;" />', obj.photo.url)
         return "—"
     photo_preview.short_description = 'Фото'
+
+
+class GalleryImageInline(admin.TabularInline):
+    model = GalleryImage
+    extra = 1
+    fields = ('image', 'title', 'description', 'order', 'preview')
+    readonly_fields = ('preview',)
+
+    def preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="150" />', obj.image.url)
+        return "—"
+
+    preview.short_description = 'Превью'
+
+
+@admin.register(Gallery)
+class GalleryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'created_at', 'image_count')
+    inlines = [GalleryImageInline]
+
+    def image_count(self, obj):
+        return obj.images.count()
+
+    image_count.short_description = 'Фотографий'

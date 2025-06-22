@@ -45,3 +45,30 @@ class News(models.Model):
     class Meta:
         verbose_name = 'Новость'
         verbose_name_plural = 'Новости'
+
+class Gallery(models.Model):
+    title = models.CharField('Название', max_length=200, blank=True)
+    description = models.TextField('Описание', blank=True)
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Галерея'
+        verbose_name_plural = 'Галереи'
+
+    def __str__(self):
+        return self.title or f"Галерея #{self.id}"
+
+class GalleryImage(models.Model):
+    gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField('Изображение', upload_to='gallery/')
+    title = models.CharField('Название', max_length=200, blank=True)
+    description = models.TextField('Описание', blank=True)
+    order = models.PositiveIntegerField('Порядок', default=0)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'Изображение галереи'
+        verbose_name_plural = 'Изображения галереи'
+
+    def __str__(self):
+        return self.title or f"Изображение #{self.id}"
