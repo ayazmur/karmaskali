@@ -1,27 +1,166 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-    <h2>Новости</h2>
+<div class="news-page">
+    <h1 class="page-title">Новости</h1>
+
     <div class="news-list">
         {% for news_item in news %}
-            <div class="news-preview">
-                <a href="{% url 'news_detail' news_item.id %}" class="news-link">
-                    {% with featured_image=news_item.featured_image %}
-                        <div class="news-image-wrapper">
-                            {% if featured_image %}
-                                <img src="{{ featured_image.image.url }}" alt="{{ news_item.title }}" class="news-thumbnail">
-                            {% else %}
-                                <img src="/static/images/news-placeholder.jpg" alt="Новость без изображения" class="news-thumbnail">
-                            {% endif %}
-                        </div>
-                    {% endwith %}
-                    <div class="news-info">
-                        <h3>{{ news_item.title }}</h3>
-                        <p class="news-date">{{ news_item.date|date:"d.m.Y" }}</p>
-                        <p class="news-excerpt">{{ news_item.content|truncatewords:30 }}</p>
-                    </div>
+        <div class="news-item {% if news_item.featured_image %}with-image{% else %}no-image{% endif %}">
+            {% with featured_image=news_item.featured_image %}
+                {% if featured_image %}
+                <div class="news-image-container">
+                    <img src="{{ featured_image.image.url }}" alt="{{ news_item.title }}" class="news-image">
+                </div>
+                {% endif %}
+            {% endwith %}
+
+            <div class="news-content">
+                <h2 class="news-title">{{ news_item.title }}</h2>
+
+                <div class="news-meta">
+                    {% if news_item.author %}
+                    <span class="news-author">
+                        <i class="fas fa-user"></i> {{ news_item.author.get_full_name|default:news_item.author.username }}
+                    </span>
+                    {% endif %}
+                    <span class="news-date">
+                        <i class="far fa-clock"></i> {{ news_item.get_local_date }}
+                    </span>
+                </div>
+
+                <div class="news-excerpt">
+                    {{ news_item.content|truncatewords:30|striptags }}
+                </div>
+
+                <a href="{% url 'news_detail' news_item.id %}" class="read-more">
+                    Читать далее <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
+        </div>
         {% endfor %}
     </div>
+</div>
+
+<style>
+.news-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.page-title {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #2c3e50;
+}
+
+.news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.news-item {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+.news-item.with-image {
+    display: flex;
+}
+
+.news-item.no-image {
+    padding: 25px;
+}
+
+.news-image-container {
+    flex: 0 0 350px;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    padding: 15px;
+}
+
+.news-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 5px;
+}
+
+.news-content {
+    flex: 1;
+    padding: 25px;
+}
+
+.news-title {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.news-meta {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+    color: #7f8c8d;
+    font-size: 0.9em;
+}
+
+.news-meta i {
+    margin-right: 5px;
+}
+
+.news-excerpt {
+    margin: 20px 0;
+    line-height: 1.7;
+    color: #34495e;
+}
+
+.read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #3498db;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.read-more:hover {
+    color: #2980b9;
+}
+
+@media (max-width: 768px) {
+    .news-item.with-image {
+        flex-direction: column;
+    }
+
+    .news-image-container {
+        flex: 0 0 auto;
+        min-height: 200px;
+    }
+
+    .news-content {
+        padding: 20px;
+    }
+}
+</style>
+
+<!-- Подключаем Font Awesome для иконок -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
