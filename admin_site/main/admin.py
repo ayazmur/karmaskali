@@ -117,4 +117,16 @@ class NewsAdmin(admin.ModelAdmin):
         return JsonResponse({'status': 'error'}, status=400)
 
 
-admin.site.register(Employee)
+@admin.register(Employee)
+class EmployeeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'position', 'phone', 'photo_preview')
+    list_display_links = ('name',)
+    search_fields = ('name', 'position')
+    fields = ('name', 'position', 'phone', 'photo', 'bio')
+    readonly_fields = ('photo_preview',)
+
+    def photo_preview(self, obj):
+        if obj.photo:
+            return format_html('<img src="{}" width="50" height="50" style="object-fit: cover; border-radius: 4px;" />', obj.photo.url)
+        return "—"
+    photo_preview.short_description = 'Фото'

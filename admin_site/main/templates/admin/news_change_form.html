@@ -3,10 +3,10 @@
 
 {% block after_field_sets %}
 {{ block.super }}
-{% if original.pk %}  <!-- Показываем кнопку только для существующей новости -->
+{% if original.pk %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // ... остальной JavaScript код без изменений ...
+
 });
 </script>
 {% endif %}
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 {% block inline_field_sets %}
 {{ block.super }}
-{% if original.pk %}  <!-- Показываем кнопку и галерею только для существующей новости -->
+{% if original.pk %}
 <div class="upload-images-btn">
     <a href="upload-images/{{ original.id }}/" class="button">Загрузить несколько изображений</a>
 </div>

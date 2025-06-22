@@ -1,17 +1,82 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
     <h2>Наши сотрудники</h2>
-    <div class="employees">
-        {% for employee in employees %}
-            <div class="employee">
-                <h3>{{ employee.name }}</h3>
-                {% if employee.photo %}
-                    <img src="{{ employee.photo.url }}" alt="{{ employee.name }}" width="150">
-                {% endif %}
-                <p><strong>Должность:</strong> {{ employee.position }}</p>
-                <p>{{ employee.bio }}</p>
-            </div>
-        {% endfor %}
+    <div class="employees-table-container">
+        <table class="employees-table">
+            <thead>
+                <tr>
+                    <th>ФИО</th>
+                    <th>Фото</th>
+                    <th>Должность</th>
+                    <th>Рабочий телефон</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>{{ employee.name }}</td>
+                    <td>
+                        {% if employee.photo %}
+                                <img src="{{ employee.photo.url }}" alt="{{ employee.name }}" class="employee-photo">
+
+                        {% else %}
+                            <img src="{% static 'images/employee-placeholder.jpg' %}" alt="Нет фото" class="employee-photo">
+                        {% endif %}
+                    </td>
+                    <td>{{ employee.position }}</td>
+                    <td>{% if employee.phone %}{{ employee.phone }}{% else %}—{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    <style>
+        .employees-table-container {
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .employees-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9em;
+            min-width: 600px;
+        }
+
+        .employees-table th {
+            background-color: #4CAF50;
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+        }
+
+        .employees-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #dddddd;
+            vertical-align: middle;
+        }
+
+        .employees-table tr:nth-child(even) {
+            background-color: #f3f3f3;
+        }
+
+        .employees-table tr:hover {
+            background-color: #e9e9e9;
+        }
+
+        .employee-photo {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            transition: transform 0.3s ease;
+        }
+
+        .employee-photo-link:hover .employee-photo {
+            transform: scale(1.1);
+        }
+    </style>
 {% endblock %}
