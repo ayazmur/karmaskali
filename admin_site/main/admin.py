@@ -38,17 +38,14 @@ class NewsImageForm(forms.ModelForm):
 
 class NewsImageInline(admin.TabularInline):
     model = NewsImage
-    form = NewsImageForm
-    extra = 0
-    fields = ('image', 'is_featured', 'caption', 'order', 'preview')
+    extra = 1
+    fields = ('image', 'is_featured', 'order', 'preview')
     readonly_fields = ('preview',)
-    ordering = ('order',)
 
     def preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" width="150" />', obj.image.url)
         return "—"
-
     preview.short_description = 'Превью'
 
 
@@ -66,9 +63,8 @@ class NewsAdmin(admin.ModelAdmin):
     def display_featured_image(self, obj):
         featured = obj.featured_image()
         if featured:
-            return format_html('<img src="{}" width="150" />', featured.image.url)
+            return format_html('<img src="{}" width="100" />', featured.image.url)
         return "—"
-
     display_featured_image.short_description = 'Главное изображение'
 
     def get_urls(self):

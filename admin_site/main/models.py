@@ -1,4 +1,8 @@
+
+
+from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 from ckeditor.fields import RichTextField
 
 class Employee(models.Model):
@@ -18,33 +22,41 @@ class Employee(models.Model):
 
 class NewsImage(models.Model):
     news = models.ForeignKey('News', on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='news/images/')
-    is_featured = models.BooleanField(default=False, verbose_name='Главное изображение')
-    caption = models.CharField(max_length=200, blank=True, verbose_name='Подпись')
-    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+    image = models.ImageField('Изображение', upload_to='news/images/')
+    is_featured = models.BooleanField('Главное изображение', default=False)
+    order = models.PositiveIntegerField('Порядок', default=0)
 
     class Meta:
         ordering = ['order']
+        verbose_name = 'Изображение новости'
+        verbose_name_plural = 'Изображения новостей'
 
     def __str__(self):
         return f"Изображение для {self.news.title}"
 
+
 class News(models.Model):
     title = models.CharField('Заголовок', max_length=200)
-    content = RichTextField('Текст новости')
-    date = models.DateTimeField('Дата публикации', auto_now_add=True)
+    content = models.TextField('Текст новости')
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор')
+    date = models.DateTimeField('Дата публикации', default=timezone.now)
 
     def __str__(self):
         return self.title
 
     def featured_image(self):
-        # Возвращает главное изображение или первое, если не выбрано
+        """Возвращает главное изображение или первое, если не выбрано"""
         featured = self.images.filter(is_featured=True).first()
         return featured or self.images.first()
+
+    def get_local_date(self):
+        """Возвращает дату в Уфимском времени (UTC+5)"""
+        return timezone.localtime(self.date).strftime('%d.%m.%Y %H:%M')
 
     class Meta:
         verbose_name = 'Новость'
         verbose_name_plural = 'Новости'
+        ordering = ['-date']
 
 class Gallery(models.Model):
     title = models.CharField('Название', max_length=200, blank=True)

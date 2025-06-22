@@ -1,34 +1,449 @@
 {% extends 'base.html' %}
+{% load tz %}
 
 {% block content %}
-<article>
-    <h1>{{ news.title }}</h1>
-    <p><small>{{ news.date }}</small></p>
-    
-    {% with featured_image=news.featured_image %}
-        {% if featured_image %}
-            <img src="{{ featured_image.image.url }}" alt="{{ news.title }}" class="news-image">
-        {% endif %}
-    {% endwith %}
+<div class="news-detail-container">
+    <article class="news-article">
+        <header class="news-header">
+            <h1 class="news-title">{{ news.title }}</h1>
+            <div class="news-meta">
+                {% if news.author %}
+                <span class="author">
+                    <i class="fas fa-user"></i> {{ news.author.get_full_name|default:news.author.username }}
+                </span>
+                {% endif %}
+                <span class="date">
+                    <i class="far fa-clock"></i> {{ news.date|localtime|date:"d.m.Y H:i" }}
+                </span>
+            </div>
+        </header>
 
-    <div class="news-content">
-        {{ news.content|safe }}
-    </div>
-
-    {% if news.images.count > 1 %}
-    <div class="news-gallery">
-        <h3>Галерея</h3>
-        {% for image in news.images.all %}
-            {% if not image.is_featured %}
-                <figure>
-                    <img src="{{ image.image.url }}" alt="{{ image.caption|default:news.title }}" class="news-gallery-image">
-                    {% if image.caption %}
-                        <figcaption>{{ image.caption }}</figcaption>
-                    {% endif %}
-                </figure>
+        {% with featured_image=news.featured_image %}
+            {% if featured_image %}
+            <div class="featured-image">
+                <img src="{{ featured_image.image.url }}" alt="{{ news.title }}" class="main-image">
+                {% if featured_image.caption %}
+                <p class="image-caption">{{ featured_image.caption }}</p>
+                {% endif %}
+            </div>
             {% endif %}
-        {% endfor %}
-    </div>
-    {% endif %}
-</article>
+        {% endwith %}
+
+        <div class="news-content">
+            {{ news.content|linebreaks }}
+        </div>
+
+        {% if news.images.count > 1 %}
+        <section class="news-gallery">
+            <h2 class="gallery-title">Галерея</h2>
+            <div class="gallery-grid">
+                {% for image in news.images.all %}
+                    {% if not image.is_featured %}
+                    <div class="gallery-item" onclick="openModal({{ forloop.counter0 }})">
+                        <img src="{{ image.image.url }}" alt="{{ image.caption|default:'Фото галереи' }}" class="gallery-image">
+                        {% if image.caption %}
+                        <p class="gallery-caption">{{ image.caption }}</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <div id="imageModal" class="modal">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="nav prev" onclick="changeImage(-1)">&#10094;</span>
+            <span class="nav next" onclick="changeImage(1)">&#10095;</span>
+            <div class="modal-content">
+                <img id="modalImage" src="" alt="Просмотр изображения">
+            </div>
+            <div class="modal-caption" id="modalCaption"></div>
+        </div>
+
+        <footer class="news-footer">
+            <a href="{% url 'news' %}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Вернуться к списку новостей
+            </a>
+        </footer>
+    </article>
+</div>
+
+<style>
+/* Основные стили */
+.news-detail-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+.news-article {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+/* Заголовок новости */
+.news-header {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.news-title {
+    color: #2c3e50;
+    margin: 0 0 15px 0;
+    font-size: 2em;
+    line-height: 1.3;
+}
+
+.news-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: #7f8c8d;
+    font-size: 0.95em;
+}
+
+.news-meta i {
+    margin-right: 5px;
+    color: #3498db;
+}
+
+/* Главное изображение */
+.featured-image {
+    margin: 25px 0;
+    text-align: center;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.main-image {
+    max-width: 100%;
+    max-height: 500px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.image-caption {
+    margin-top: 10px;
+    font-style: italic;
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Контент новости */
+.news-content {
+    line-height: 1.8;
+    color: #34495e;
+    font-size: 1.05em;
+    margin: 40px 0;
+}
+
+.news-content p {
+    margin-bottom: 20px;
+}
+
+/* Галерея изображений */
+.news-gallery {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid #eee;
+}
+
+.gallery-title {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-size: 1.5em;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.gallery-item {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.gallery-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.gallery-caption {
+    padding: 10px;
+    margin: 0;
+    font-size: 0.9em;
+    color: #555;
+    text-align: center;
+    background: #f8f8f8;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+    overflow: auto;
+    animation: fadeIn 0.3s;
+}
+
+.modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    margin-top: 30px;
+}
+
+#modalImage {
+    max-width: 90%;
+    max-height: 80vh;
+    object-fit: contain;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #bbb;
+}
+
+.nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 15px;
+    user-select: none;
+    transition: 0.3s;
+}
+
+.prev {
+    left: 20px;
+}
+
+.next {
+    right: 20px;
+}
+
+.nav:hover {
+    color: #ddd;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 50%;
+}
+
+.modal-caption {
+    text-align: center;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+}
+
+/* Футер */
+.news-footer {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #3498db;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 1px solid #3498db;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.back-link:hover {
+    color: white;
+    background-color: #3498db;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .news-detail-container {
+        padding: 15px;
+    }
+
+    .news-article {
+        padding: 20px;
+    }
+
+    .news-title {
+        font-size: 1.7em;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    .gallery-image {
+        height: 150px;
+    }
+
+    .main-image {
+        max-height: 300px;
+    }
+
+    .close {
+        top: 15px;
+        right: 25px;
+        font-size: 35px;
+    }
+
+    .nav {
+        font-size: 40px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .news-title {
+        font-size: 1.5em;
+    }
+
+    .news-meta {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .close {
+        top: 10px;
+        right: 15px;
+        font-size: 30px;
+    }
+}
+</style>
+
+<script>
+// Массив данных изображений (URL и подписи)
+const galleryData = [
+    {% for image in news.images.all %}
+        {% if not image.is_featured %}
+        {
+            url: "{{ image.image.url }}",
+            caption: "{{ image.caption|default:''|escapejs }}"
+        },
+        {% endif %}
+    {% endfor %}
+];
+
+let currentImageIndex = 0;
+
+// Открытие модального окна
+function openModal(index) {
+    currentImageIndex = index;
+    const modalImg = document.getElementById('modalImage');
+    const modalCaption = document.getElementById('modalCaption');
+
+    modalImg.src = galleryData[index].url;
+    modalCaption.textContent = galleryData[index].caption;
+
+    document.getElementById('imageModal').style.display = "block";
+    document.body.style.overflow = "hidden";
+}
+
+// Закрытие модального окна
+function closeModal() {
+    document.getElementById('imageModal').style.display = "none";
+    document.body.style.overflow = "auto";
+}
+
+// Переключение изображений
+function changeImage(n) {
+    currentImageIndex += n;
+
+    // Зацикливание навигации
+    if (currentImageIndex >= galleryData.length) {
+        currentImageIndex = 0;
+    } else if (currentImageIndex < 0) {
+        currentImageIndex = galleryData.length - 1;
+    }
+
+    const modalImg = document.getElementById('modalImage');
+    const modalCaption = document.getElementById('modalCaption');
+
+    modalImg.src = galleryData[currentImageIndex].url;
+    modalCaption.textContent = galleryData[currentImageIndex].caption;
+}
+
+// Закрытие по клику вне изображения
+window.onclick = function(event) {
+    if (event.target == document.getElementById('imageModal')) {
+        closeModal();
+    }
+}
+
+// Навигация клавиатурой
+document.addEventListener('keydown', function(event) {
+    const modal = document.getElementById('imageModal');
+    if (modal.style.display === "block") {
+        if (event.key === 'ArrowLeft') {
+            changeImage(-1);
+        } else if (event.key === 'ArrowRight') {
+            changeImage(1);
+        } else if (event.key === 'Escape') {
+            closeModal();
+        }
+    }
+});
+</script>
+
+<!-- Подключаем Font Awesome для иконок -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
