@@ -3,7 +3,8 @@ from .models import Employee, News, Gallery
 
 
 def home(request):
-    return render(request, 'index.html')
+    latest_news = News.objects.all().order_by('-date')[:5]
+    return render(request, 'index.html', {'latest_news': latest_news})
 
 def about(request):
     return render(request, 'about.html')
