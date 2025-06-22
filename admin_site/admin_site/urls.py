@@ -13,7 +13,7 @@ def github_webhook(request):
     if request.method == 'POST':
         try:
             # Запускаем скрипт обновления
-            subprocess.run(["/home/ayazmur/auto-update.sh"], check=True)
+            subprocess.run(["/home/вашusername/auto-update.sh"], check=True)
             return HttpResponse("Сайт успешно обновлен!", status=200)
         except Exception as e:
             return HttpResponse(f"Ошибка: {e}", status=500)
