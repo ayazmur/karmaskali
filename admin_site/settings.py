@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-$)71ynh(r=rv4ny+i10w=$&mf%=8o5(i8@k6#i03ri9x0qo_+8
 DEBUG = True
 
 ALLOWED_HOSTS = ['ayazmur.pythonanywhere.com',
-                 '127.0.0.1']
+                 '127.0.0.1',
+                 'тесткарм.рф',
+		 'xn--80ajpjtdfc.xn--p1ai']
 
 
 # Application definition
@@ -130,8 +132,6 @@ USE_I18N = True
 
 # Настройки для статических файлов
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Добавьте эту строку
 
 # Настройки для медиа-файлов
@@ -141,7 +141,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-# STATIC_URL = 'static/'
+STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
