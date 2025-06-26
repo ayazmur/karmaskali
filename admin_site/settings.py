@@ -133,7 +133,7 @@ USE_I18N = True
 # Настройки для статических файлов
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Добавьте эту строку
-
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 # Настройки для медиа-файлов
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
