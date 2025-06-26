@@ -182,6 +182,7 @@ figcaption {
     padding: 15px 20px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .logo-title {
@@ -412,3 +413,24 @@ footer {
 nav a:hover .fas, nav a:hover .far {
     color: var(--accent-color);
 }
+
+.admin-link {
+    background-color: var(--primary-light);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.admin-link:hover {
+    background-color: var(--primary-dark);
+}
+
+.admin-link .fas {
+    font-size: 14px;
+    color: white;
