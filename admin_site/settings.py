@@ -133,6 +133,7 @@ USE_I18N = True
 # Настройки для статических файлов
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Добавьте эту строку
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 
 # Настройки для медиа-файлов
 MEDIA_URL = '/media/'
@@ -140,8 +141,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
