@@ -29,6 +29,11 @@
         <a href="{% url 'news' %}">Новости</a>
         <a href="{% url 'gallery' %}">Галерея</a>
         <a href="{% url 'contact' %}">Обратная связь</a>
+        {% if user.is_staff %}
+        <a href="{% url 'admin:index' %}" class="admin-link">
+            <i class="fas fa-cog"></i> Админка
+        </a>
+        {% endif %}
     </nav>
     <div class="container">
         {% block content %} {% endblock %}

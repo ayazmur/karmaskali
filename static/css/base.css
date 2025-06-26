@@ -412,3 +412,14 @@ footer {
 nav a:hover .fas, nav a:hover .far {
     color: var(--accent-color);
 }
+.admin-link {
+    background-color: #4CAF50;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-left: auto;
+}
+
+.admin-link:hover {
+    background-color: #3e8e41;
+    text-decoration: none;
+}

@@ -40,7 +40,9 @@ class News(models.Model):
     content = models.TextField('Текст новости')
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор')
     date = models.DateTimeField('Дата публикации', default=timezone.now)
-
+    # существующие поля
+    vk_post_id = models.CharField('ID поста VK', max_length=100, blank=True, null=True, unique=True)
+    vk_group_id = models.CharField('ID группы VK', max_length=100, blank=True, null=True)
     def __str__(self):
         return self.title
 

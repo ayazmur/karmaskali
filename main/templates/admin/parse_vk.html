@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Парсинг новостей из VK</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+        <label for="group_id">ID группы VK (только цифры):</label>
+        <input type="text" name="group_id" id="group_id" required>
+    </div>
+    <div style="margin-top: 20px;">
+        <input type="submit" value="Загрузить новости" class="button">
+        <a href="../" class="button">Отмена</a>
+    </div>
+</form>
+{% endblock %}

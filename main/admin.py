@@ -10,6 +10,8 @@ from django.db.models import Count
 import os
 from django.conf import settings
 
+from .vk_parser import parse_vk_posts
+
 
 # Множественная загрузка изображений
 class MultipleImageInput(forms.ClearableFileInput):
@@ -70,11 +72,26 @@ class NewsAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
+            path('parse-vk/', self.parse_vk, name='parse_vk'),
             path('upload-images/<int:news_id>/', self.upload_images, name='upload_images'),
             path('update-image-order/', self.update_image_order, name='update_image_order'),
         ]
         return custom_urls + urls
 
+    def parse_vk(self, request):
+        if request.method == 'POST':
+            group_id = request.POST.get('group_id')
+            if parse_vk_posts(group_id):
+                self.message_user(request, "Новости успешно загружены из VK")
+            else:
+                self.message_user(request, "Ошибка при загрузке новостей из VK", level='error')
+            return redirect('..')
+
+        context = {
+            **self.admin_site.each_context(request),
+            'opts': self.model._meta,
+        }
+        return TemplateResponse(request, 'admin/parse_vk.html', context)
     def upload_images(self, request, news_id):
         if news_id == 'add':
             # Если новость еще не создана, сохраняем ее сначала
