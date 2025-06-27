@@ -1,101 +1,101 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/gallery.css' %}">
+    <link rel="stylesheet" href="{% static 'css/gallery.css' %}">
 {% endblock %}
 {% block content %}
-<div class="gallery-page">
-    <h1>Галерея</h1>
-    
-    <div class="gallery-grid">
-        {% for gallery in galleries %}
-            {% for image in gallery.images.all %}
-            <div class="gallery-item"
-                 data-image="{{ image.image.url }}"
-                 data-title="{{ image.title|default:'' }}"
-                 data-description="{{ image.description|default:'' }}"
-                 onclick="openModal(this)">
-                <img src="{{ image.image.url }}" alt="{{ image.title }}" class="gallery-thumbnail">
-                {% if image.title %}
-                <div class="image-title">{{ image.title }}</div>
-                {% endif %}
-            </div>
+    <div class="gallery-page">
+        <h1>Галерея</h1>
+
+        <div class="gallery-grid">
+            {% for gallery in galleries %}
+                {% for image in gallery.images.all %}
+                    <div class="gallery-item"
+                         data-image="{{ image.image.url }}"
+                         data-title="{{ image.title|default:'' }}"
+                         data-description="{{ image.description|default:'' }}"
+                         onclick="openModal(this)">
+                        <img src="{{ image.image.url }}" alt="{{ image.title }}" class="gallery-thumbnail">
+                        {% if image.title %}
+                            <div class="image-title">{{ image.title }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Модальное окно для просмотра фото -->
-<div id="imageModal" class="modal">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <div class="modal-content">
-        <img id="modalImage" class="modal-image">
-        <div class="image-info">
-            <h2 id="modalTitle"></h2>
-            <p id="modalDescription"></p>
-        </div>
-        <div class="modal-nav">
-            <button class="nav-button prev" onclick="changeImage(-1)">❮</button>
-            <button class="nav-button next" onclick="changeImage(1)">❯</button>
         </div>
     </div>
-</div>
+
+    <!-- Модальное окно для просмотра фото -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" class="modal-image">
+            <div class="image-info">
+                <h2 id="modalTitle"></h2>
+                <p id="modalDescription"></p>
+            </div>
+            <div class="modal-nav">
+                <button class="nav-button prev" onclick="changeImage(-1)">❮</button>
+                <button class="nav-button next" onclick="changeImage(1)">❯</button>
+            </div>
+        </div>
+    </div>
 
 
 
-<script>
-// Глобальные переменные для управления галереей
-let currentImageIndex = 0;
-const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
+    <script>
+        // Глобальные переменные для управления галереей
+        let currentImageIndex = 0;
+        const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
 
-function openModal(element) {
-    currentImageIndex = galleryItems.indexOf(element);
-    updateModalContent();
-    document.getElementById('imageModal').style.display = 'block';
-    document.body.style.overflow = 'hidden'; // Блокируем прокрутку страницы
-}
+        function openModal(element) {
+            currentImageIndex = galleryItems.indexOf(element);
+            updateModalContent();
+            document.getElementById('imageModal').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Блокируем прокрутку страницы
+        }
 
-function closeModal() {
-    document.getElementById('imageModal').style.display = 'none';
-    document.body.style.overflow = 'auto'; // Восстанавливаем прокрутку
-}
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Восстанавливаем прокрутку
+        }
 
-function changeImage(step) {
-    currentImageIndex += step;
+        function changeImage(step) {
+            currentImageIndex += step;
 
-    // Зацикливаем переключение
-    if (currentImageIndex >= galleryItems.length) currentImageIndex = 0;
-    if (currentImageIndex < 0) currentImageIndex = galleryItems.length - 1;
+            // Зацикливаем переключение
+            if (currentImageIndex >= galleryItems.length) currentImageIndex = 0;
+            if (currentImageIndex < 0) currentImageIndex = galleryItems.length - 1;
 
-    updateModalContent();
-}
+            updateModalContent();
+        }
 
-function updateModalContent() {
-    const item = galleryItems[currentImageIndex];
-    const modalImg = document.getElementById('modalImage');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDesc = document.getElementById('modalDescription');
+        function updateModalContent() {
+            const item = galleryItems[currentImageIndex];
+            const modalImg = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDesc = document.getElementById('modalDescription');
 
-    modalImg.src = item.dataset.image;
-    modalTitle.textContent = item.dataset.title;
-    modalDesc.textContent = item.dataset.description;
-}
+            modalImg.src = item.dataset.image;
+            modalTitle.textContent = item.dataset.title;
+            modalDesc.textContent = item.dataset.description;
+        }
 
-// Закрытие модального окна при клике вне изображения
-window.onclick = function(event) {
-    if (event.target == document.getElementById('imageModal')) {
-        closeModal();
-    }
-}
+        // Закрытие модального окна при клике вне изображения
+        window.onclick = function (event) {
+            if (event.target == document.getElementById('imageModal')) {
+                closeModal();
+            }
+        }
 
-// Управление клавиатурой
-document.addEventListener('keydown', function(event) {
-    const modal = document.getElementById('imageModal');
-    if (modal.style.display === 'block') {
-        if (event.key === 'Escape') closeModal();
-        if (event.key === 'ArrowLeft') changeImage(-1);
-        if (event.key === 'ArrowRight') changeImage(1);
-    }
-});
-</script>
+        // Управление клавиатурой
+        document.addEventListener('keydown', function (event) {
+            const modal = document.getElementById('imageModal');
+            if (modal.style.display === 'block') {
+                if (event.key === 'Escape') closeModal();
+                if (event.key === 'ArrowLeft') changeImage(-1);
+                if (event.key === 'ArrowRight') changeImage(1);
+            }
+        });
+    </script>
 {% endblock %}

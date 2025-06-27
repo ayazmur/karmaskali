@@ -1,9 +1,8 @@
-
-
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from ckeditor.fields import RichTextField
+
 
 class Employee(models.Model):
     name = models.CharField('ФИО', max_length=100)
@@ -58,6 +57,7 @@ class News(models.Model):
         verbose_name_plural = 'Новости'
         ordering = ['-date']
 
+
 class Gallery(models.Model):
     title = models.CharField('Название', max_length=200, blank=True)
     description = models.TextField('Описание', blank=True)
@@ -69,6 +69,7 @@ class Gallery(models.Model):
 
     def __str__(self):
         return self.title or f"Галерея #{self.id}"
+
 
 class GalleryImage(models.Model):
     gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE, related_name='images')

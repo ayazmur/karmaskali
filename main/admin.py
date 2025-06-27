@@ -46,6 +46,7 @@ class NewsImageInline(admin.TabularInline):
         if obj.image:
             return format_html('<img src="{}" width="150" />', obj.image.url)
         return "—"
+
     preview.short_description = 'Превью'
 
 
@@ -65,6 +66,7 @@ class NewsAdmin(admin.ModelAdmin):
         if featured:
             return format_html('<img src="{}" width="100" />', featured.image.url)
         return "—"
+
     display_featured_image.short_description = 'Главное изображение'
 
     def get_urls(self):
@@ -123,8 +125,10 @@ class EmployeeAdmin(admin.ModelAdmin):
 
     def photo_preview(self, obj):
         if obj.photo:
-            return format_html('<img src="{}" width="50" height="50" style="object-fit: cover; border-radius: 4px;" />', obj.photo.url)
+            return format_html('<img src="{}" width="50" height="50" style="object-fit: cover; border-radius: 4px;" />',
+                               obj.photo.url)
         return "—"
+
     photo_preview.short_description = 'Фото'
 
 

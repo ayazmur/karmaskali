@@ -10,43 +10,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <div class="logo-title">
-                <img src="{% static 'img/karm_logo.png' %}" alt="Логотип" class="logo">
-                <div>
-                    <h1>Муниципальное казённое учреждение</h1>
-                    <p>"Централизованная бухгалтерия муниципальных учреждений"<br>
+<header>
+    <div class="header-container">
+        <div class="logo-title">
+            <img src="{% static 'img/karm_logo.png' %}" alt="Логотип" class="logo">
+            <div>
+                <h1>Муниципальное казённое учреждение</h1>
+                <p>"Централизованная бухгалтерия муниципальных учреждений"<br>
                     Кармаскалинского района Республики Башкортостан</p>
-                </div>
             </div>
-                <a href="{% url 'admin:index' %}" class="admin-link">
-                    <i class="fas fa-cog"></i>
-                </a>
         </div>
-    </header>
-    <nav>
-        <a href="{% url 'home' %}">Главная</a>
-        <a href="{% url 'about' %}">О нас</a>
-        <a href="{% url 'employees' %}">Сотрудники</a>
-        <a href="{% url 'news' %}">Новости</a>
-        <a href="{% url 'gallery' %}">Галерея</a>
-        <a href="{% url 'contact' %}">Обратная связь</a>
-    </nav>
-    <div class="container">
-        {% block content %} {% endblock %}
+        <a href="{% url 'admin:index' %}" class="admin-link">
+            <i class="fas fa-cog"></i>
+        </a>
     </div>
-    <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="https://admkarm.bashkortostan.ru/" target="_blank">Администрация Кармаскалинского района</a>
-                <a href="https://t.me/ayaz_mur" target="_blank">Разработчик сайта</a>
-            </div>
-            <div class="social-links">
-                <a href="https://vk.com/public220778864" target="_blank" title="ВКонтакте"><i class="fab fa-vk"></i></a>
-            </div>
-            <p>&copy; 2025 Централизованная бухгалтерия муниципальных учреждений Кармаскалинского района</p>
+</header>
+<nav>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'about' %}">О нас</a>
+    <a href="{% url 'employees' %}">Сотрудники</a>
+    <a href="{% url 'news' %}">Новости</a>
+    <a href="{% url 'gallery' %}">Галерея</a>
+    <a href="{% url 'contact' %}">Обратная связь</a>
+</nav>
+<div class="container">
+    {% block content %} {% endblock %}
+</div>
+<footer>
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="https://admkarm.bashkortostan.ru/" target="_blank">Администрация Кармаскалинского района</a>
+            <a href="https://t.me/ayaz_mur" target="_blank">Разработчик сайта</a>
         </div>
-    </footer>
+        <div class="social-links">
+            <a href="https://vk.com/public220778864" target="_blank" title="ВКонтакте"><i class="fab fa-vk"></i></a>
+        </div>
+        <p>&copy; 2025 Централизованная бухгалтерия муниципальных учреждений Кармаскалинского района</p>
+    </div>
+</footer>
 </body>
 </html>

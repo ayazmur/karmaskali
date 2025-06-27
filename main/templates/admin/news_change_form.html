@@ -2,33 +2,34 @@
 {% load static %}
 
 {% block after_field_sets %}
-{{ block.super }}
-{% if original.pk %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
+    {{ block.super }}
+    {% if original.pk %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
 
-});
-</script>
-{% endif %}
+            });
+        </script>
+    {% endif %}
 {% endblock %}
 
 {% block inline_field_sets %}
-{{ block.super }}
-{% if original.pk %}
-<div class="upload-images-btn">
-    <a href="upload-images/{{ original.id }}/" class="button">Загрузить несколько изображений</a>
-</div>
-{% if original.images.exists %}
-<h2>Управление изображениями</h2>
-<div id="image-sort-list">
-    {% for image in original.images.all %}
-    <div class="image-sort-item" data-id="{{ image.id }}">
-        <img src="{{ image.image.url }}" width="100" style="vertical-align: middle; margin-right: 10px;">
-        <span>{{ image.caption|default:"Без подписи" }}</span>
-        {% if image.is_featured %}<strong>(Главное)</strong>{% endif %}
-    </div>
-    {% endfor %}
-</div>
-{% endif %}
-{% endif %}
+    {{ block.super }}
+    {% if original.pk %}
+        <div class="upload-images-btn">
+            <a href="upload-images/{{ original.id }}/" class="button">Загрузить несколько изображений</a>
+        </div>
+        {% if original.images.exists %}
+            <h2>Управление изображениями</h2>
+            <div id="image-sort-list">
+                {% for image in original.images.all %}
+                    <div class="image-sort-item" data-id="{{ image.id }}">
+                        <img src="{{ image.image.url }}" width="100"
+                             style="vertical-align: middle; margin-right: 10px;">
+                        <span>{{ image.caption|default:"Без подписи" }}</span>
+                        {% if image.is_featured %}<strong>(Главное)</strong>{% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endif %}
 {% endblock %}

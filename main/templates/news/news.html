@@ -1,50 +1,51 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/news.css' %}">
+    <link rel="stylesheet" href="{% static 'css/news.css' %}">
 {% endblock %}
 {% block content %}
-<div class="news-page">
-    <h1 class="page-title">Новости</h1>
+    <div class="news-page">
+        <h1 class="page-title">Новости</h1>
 
-    <div class="news-list">
-        {% for news_item in news %}
-        <div class="news-item {% if news_item.featured_image %}with-image{% else %}no-image{% endif %}">
-            {% with featured_image=news_item.featured_image %}
-                {% if featured_image %}
-                <div class="news-image-container">
-                    <img src="{{ featured_image.image.url }}" alt="{{ news_item.title }}" class="news-image">
-                </div>
-                {% endif %}
-            {% endwith %}
+        <div class="news-list">
+            {% for news_item in news %}
+                <div class="news-item {% if news_item.featured_image %}with-image{% else %}no-image{% endif %}">
+                    {% with featured_image=news_item.featured_image %}
+                        {% if featured_image %}
+                            <div class="news-image-container">
+                                <img src="{{ featured_image.image.url }}" alt="{{ news_item.title }}"
+                                     class="news-image">
+                            </div>
+                        {% endif %}
+                    {% endwith %}
 
-            <div class="news-content">
-                <h2 class="news-title">{{ news_item.title }}</h2>
+                    <div class="news-content">
+                        <h2 class="news-title">{{ news_item.title }}</h2>
 
-                <div class="news-meta">
-                    {% if news_item.author %}
-                    <span class="news-author">
+                        <div class="news-meta">
+                            {% if news_item.author %}
+                                <span class="news-author">
                         <i class="fas fa-user"></i> {{ news_item.author.get_full_name|default:news_item.author.username }}
                     </span>
-                    {% endif %}
-                    <span class="news-date">
+                            {% endif %}
+                            <span class="news-date">
                         <i class="far fa-clock"></i> {{ news_item.get_local_date }}
                     </span>
-                </div>
+                        </div>
 
-                <div class="news-excerpt">
-                    {{ news_item.content|truncatewords:30|striptags }}
-                </div>
+                        <div class="news-excerpt">
+                            {{ news_item.content|truncatewords:30|striptags }}
+                        </div>
 
-                <a href="{% url 'news_detail' news_item.id %}" class="read-more">
-                    Читать далее <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
+                        <a href="{% url 'news_detail' news_item.id %}" class="read-more">
+                            Читать далее <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
 
-<!-- Подключаем Font Awesome для иконок -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Подключаем Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
