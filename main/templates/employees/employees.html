@@ -6,35 +6,42 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Наши сотрудники</h2>
-    <div class="employees-table-container">
-        <table class="employees-table">
-            <thead>
-            <tr>
-                <th>ФИО</th>
-                <th>Фото</th>
-                <th>Должность</th>
-                <th>Рабочий телефон</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for employee in employees %}
-                <tr>
-                    <td>{{ employee.name }}</td>
-                    <td>
-                        {% if employee.photo %}
-                            <img src="{{ employee.photo.url }}" alt="{{ employee.name }}" class="employee-photo">
+    <div class="employees-page">
+        <h1>Наши сотрудники</h1>
 
-                        {% else %}
-                            <img src="{% static 'images/employee-placeholder.jpg' %}" alt="Нет фото"
-                                 class="employee-photo">
-                        {% endif %}
-                    </td>
-                    <td>{{ employee.position }}</td>
-                    <td>{% if employee.phone %}{{ employee.phone }}{% else %}—{% endif %}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="employees-table">
+                <thead>
+                    <tr>
+                        <th>Фото</th>
+                        <th>ФИО</th>
+                        <th>Должность</th>
+                        <th>Телефон</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees %}
+                    <tr>
+                        <td class="employee-photo-cell">
+                            {% if employee.photo %}
+                                <img src="{{ employee.photo.url }}" alt="{{ employee.name }}" class="employee-photo">
+                            {% else %}
+                                <img src="{% static 'img/employee_placeholder.png' %}" alt="Нет фото" class="employee-photo">
+                            {% endif %}
+                        </td>
+                        <td>{{ employee.name }}</td>
+                        <td>{{ employee.position }}</td>
+                        <td>
+                            {% if employee.phone %}
+                                <a href="tel:{{ employee.phone }}">{{ employee.phone }}</a>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

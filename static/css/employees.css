@@ -1,57 +1,132 @@
-.employees-table-container {
-    margin: 20px 0;
+/* Базовые стили таблицы */
+.employees-page {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.table-responsive {
     overflow-x: auto;
+    margin-top: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .employees-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 0.9em;
-    min-width: 600px;
+    font-size: 16px;
 }
 
 .employees-table th {
-    background-color: #4CAF50;
+    background-color: var(--primary-color);
     color: white;
+    padding: 15px;
     text-align: left;
-    padding: 12px 15px;
 }
 
 .employees-table td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #dddddd;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
     vertical-align: middle;
 }
 
 .employees-table tr:nth-child(even) {
-    background-color: #f3f3f3;
+    background-color: #f9f9f9;
 }
 
 .employees-table tr:hover {
-    background-color: #e9e9e9;
+    background-color: #f1f1f1;
 }
 
+/* Стили для фото */
 .employee-photo {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
-    border-radius: 4px;
-    transition: transform 0.3s ease;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    transition: transform 0.3s;
 }
 
-.employee-photo-link:hover .employee-photo {
+.employee-photo-cell:hover .employee-photo {
     transform: scale(1.1);
 }
-.employees-table th {
-    background-color: var(--primary-color);
-    color: white;
-}
 
-.employees-table tr:hover {
-    background-color: #e6e6ff;
-}
-
-.read-more {
+/* Стили для телефона */
+.employees-table a {
     color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.employees-table a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .employees-table {
+        font-size: 14px;
+    }
+
+    .employee-photo {
+        width: 70px;
+        height: 70px;
+    }
+
+    .employees-table th,
+    .employees-table td {
+        padding: 12px 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .employee-photo {
+        width: 60px;
+        height: 60px;
+    }
+
+    /* Скрываем заголовки и делаем таблицу "карточной" */
+    .employees-table thead {
+        display: none;
+    }
+
+    .employees-table tr {
+        display: block;
+        margin-bottom: 15px;
+        border-bottom: 2px solid var(--primary-color);
+    }
+
+    .employees-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .employees-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-right: 15px;
+        flex: 0 0 100px;
+    }
+
+    /* Добавляем метки для ячеек */
+    .employees-table td:nth-child(1) { data-label: "Фото"; }
+    .employees-table td:nth-child(2) { data-label: "ФИО"; }
+    .employees-table td:nth-child(3) { data-label: "Должность"; }
+    .employees-table td:nth-child(4) { data-label: "Телефон"; }
+
+    /* Особый стиль для ячейки с фото */
+    .employee-photo-cell {
+        justify-content: center;
+    }
+
+    .employee-photo-cell::before {
+        display: none;
+    }
 }
