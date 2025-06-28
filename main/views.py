@@ -1,5 +1,9 @@
+from django.core.mail import send_mail
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.conf import settings
+from django.contrib import messages
+
 from .models import Employee, News, Gallery
 
 
@@ -43,8 +47,21 @@ def news_detail(request, news_id):
 
 def contact(request):
     if request.method == 'POST':
-        # Обработка формы (можно добавить сохранение в БД или отправку на почту)
-        pass
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        # Отправка email (настройте SMTP в settings.py)
+        send_mail(
+            f"Сообщение от {name}",
+            message,
+            email,
+            [settings.EMAIL_HOST_USER],
+            fail_silently=False,
+        )
+        messages.success(request, 'Ваше сообщение отправлено!')
+        return redirect('contact')
+
     return render(request, 'contact.html')
 
 
