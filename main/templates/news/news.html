@@ -6,9 +6,21 @@
 {% block content %}
     <div class="news-page">
         <h1 class="page-title">Новости</h1>
+        <!-- Поиск по новостям -->
+        <div class="news-search">
+            <form method="get" action="{% url 'news' %}">
+                <input
+                        type="text"
+                        name="q"
+                        placeholder="Поиск по новостям..."
+                        value="{{ search_query|default:'' }}"
+                >
+                <button type="submit">Найти</button>
+            </form>
+        </div>
 
         <div class="news-list">
-            {% for news_item in news %}
+            {% for news_item in page_obj %}
                 <div class="news-item {% if news_item.featured_image %}with-image{% else %}no-image{% endif %}">
                     {% with featured_image=news_item.featured_image %}
                         {% if featured_image %}
@@ -43,6 +55,23 @@
                     </div>
                 </div>
             {% endfor %}
+        </div>
+        <!-- Пагинация -->
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1{% if search_query %}&q={{ search_query }}{% endif %}">Первая</a>
+                <a href="?page=
+                        {{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}">Назад</a>
+            {% endif %}
+
+            <span class="current-page">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}">Вперед</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&q={{ search_query }}{% endif %}">Последняя</a>
+            {% endif %}
         </div>
     </div>
 
