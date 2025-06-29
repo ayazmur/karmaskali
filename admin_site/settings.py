@@ -31,7 +31,8 @@ ALLOWED_HOSTS = ['ayazmur.pythonanywhere.com',
                  '127.0.0.1',
                  'http://127.0.0.1:8000/',
                  'тесткарм.рф',
-		 'xn--80ajpjtdfc.xn--p1ai']
+		 'xn--80ajpjtdfc.xn--p1ai',
+                 'cbkarm.ru']
 
 
 # Application definition
