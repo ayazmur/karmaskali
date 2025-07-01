@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -72,7 +73,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+if DEBUG:
+    MIDDLEWARE += [
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.cache.UpdateCacheMiddleware',  # Отключаем кеширование
+        'django.middleware.cache.FetchFromCacheMiddleware',
+    ]
 ROOT_URLCONF = 'admin_site.urls'
 
 TEMPLATES = [
@@ -145,7 +151,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
