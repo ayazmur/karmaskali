@@ -19,7 +19,8 @@ class Command(BaseCommand):
         try:
             response = requests.get(url)
             data = response.json()
-
+            print('testh')
+            self.stdout.write(self.style.SUCCESS('ya ne pon'))
             if 'response' in data:
                 posts = data['response']['items']
 
