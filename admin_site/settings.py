@@ -47,8 +47,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ckeditor',
-    'ckeditor_uploader'
+    'ckeditor_uploader',
+    'django_crontab',
 ]
+VK_GROUP_ID = os.getenv("VK_GROUP_ID")
+VK_ACCESS_TOKEN = os.getenv("VK_ACCESS_TOKEN")
+
+CRONJOBS = [
+    ('*/30 * * * *', 'main.vk_parser.get_vk_news', '>> /tmp/vk_news_sync.log'),
+]
+
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_CONFIGS = {
     'default': {
